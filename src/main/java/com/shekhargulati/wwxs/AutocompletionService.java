@@ -2,6 +2,7 @@ package com.shekhargulati.wwxs;
 
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,16 +24,17 @@ public class AutocompletionService {
     Map<String, Map<String, Integer>> fifth = new HashMap<>();
     Map<String, Map<String, Integer>> sixth = new HashMap<>();
     Map<String, Map<String, Integer>> seventh = new HashMap<>();
-    Map<String, Map<String, Integer>> eigth = new HashMap<>();
-    Map<String, Map<String, Integer>> ninth = new HashMap<>();
-    Map<String, Map<String, Integer>> tenth = new HashMap<>();
+//    Map<String, Map<String, Integer>> eigth = new HashMap<>();
+//    Map<String, Map<String, Integer>> ninth = new HashMap<>();
+//    Map<String, Map<String, Integer>> tenth = new HashMap<>();
 
     public AutocompletionService() throws Exception {
-        init("");
     }
 
-    private void init(String dataDir) throws Exception {
-        Stream<Path> files = Files.list(Paths.get(dataDir));
+    @PostConstruct
+    public void init() throws Exception {
+        System.out.println("Loading dataset...");
+        Stream<Path> files = Files.list(Paths.get("/Users/shekhargulati/dev/git/what-will-X-say/speeches"));
 
         String data = files.flatMap(file -> {
             try {
@@ -107,26 +109,26 @@ public class AutocompletionService {
                         updateOcc(seventh, seq, words[i]);
                     }
                 }
-                if (i >= 8) {
-                    String seq = toSeq(words, i, 8);
-                    if (seq != null) {
-                        updateOcc(eigth, seq, words[i]);
-                    }
-                }
-
-                if (i >= 9) {
-                    String seq = toSeq(words, i, 9);
-                    if (seq != null) {
-                        updateOcc(ninth, seq, words[i]);
-                    }
-                }
-
-                if (i >= 10) {
-                    String seq = toSeq(words, i, 10);
-                    if (seq != null) {
-                        updateOcc(tenth, seq, words[i]);
-                    }
-                }
+//                if (i >= 8) {
+//                    String seq = toSeq(words, i, 8);
+//                    if (seq != null) {
+//                        updateOcc(eigth, seq, words[i]);
+//                    }
+//                }
+//
+//                if (i >= 9) {
+//                    String seq = toSeq(words, i, 9);
+//                    if (seq != null) {
+//                        updateOcc(ninth, seq, words[i]);
+//                    }
+//                }
+//
+//                if (i >= 10) {
+//                    String seq = toSeq(words, i, 10);
+//                    if (seq != null) {
+//                        updateOcc(tenth, seq, words[i]);
+//                    }
+//                }
             }
 
         }
@@ -150,13 +152,14 @@ public class AutocompletionService {
 
     private Map<String, Map<String, Integer>> getMap(int testLen) {
         Map<String, Map<String, Integer>> map = new HashMap<>();
-        if (testLen == 10) {
-            map = tenth;
-        } else if (testLen == 9) {
-            map = ninth;
-        } else if (testLen == 8) {
-            map = eigth;
-        } else if (testLen == 7) {
+//        if (testLen == 10) {
+//            map = tenth;
+//        } else if (testLen == 9) {
+//            map = ninth;
+//        } else if (testLen == 8) {
+//            map = eigth;
+//        } else
+        if (testLen == 7) {
             map = seventh;
         } else if (testLen == 6) {
             map = sixth;
@@ -198,7 +201,7 @@ public class AutocompletionService {
         entries.forEach(e -> System.out.println(String.format("%s %d", e.getKey(), Double.valueOf(((double) e.getValue() / total) * 100).intValue())));
 
         return entries.stream()
-                .map(e -> new Pair(e.getKey(), Double.valueOf(((double) e.getValue() / total) * 100).intValue()))
+                .map(e -> new Pair<>(e.getKey(), Double.valueOf(((double) e.getValue() / total) * 100).intValue()))
                 .collect(toList());
     }
 }
