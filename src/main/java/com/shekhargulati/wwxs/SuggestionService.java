@@ -37,10 +37,9 @@ public class SuggestionService {
 
     @PostConstruct
     public void init() throws Exception {
-        System.out.println("Setting up Markov chains");
         Stream<Path> files = Files.list(Paths.get(speechDataPath));
 
-        String data = files.limit(100).flatMap(file -> {
+        String data = files.flatMap(file -> {
             try {
                 return Files.lines(file);
             } catch (IOException e) {
