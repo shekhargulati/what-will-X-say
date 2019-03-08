@@ -39,7 +39,7 @@ public class SuggestionService {
     public void init() throws Exception {
         Stream<Path> files = Files.list(Paths.get(speechDataPath));
 
-        String data = files.flatMap(file -> {
+        String data = files.limit(300).flatMap(file -> {
             try {
                 return Files.lines(file);
             } catch (IOException e) {
