@@ -14,11 +14,11 @@ import java.util.Optional;
 @Component
 public class SuggestionHandler {
 
-    private AutocompletionService autocompletionService;
+    private SuggestionService suggestionService;
 
     @Autowired
-    public SuggestionHandler(AutocompletionService autocompletionService) {
-        this.autocompletionService = autocompletionService;
+    public SuggestionHandler(SuggestionService suggestionService) {
+        this.suggestionService = suggestionService;
     }
 
     public Mono<ServerResponse> suggest(ServerRequest request) {
@@ -27,7 +27,7 @@ public class SuggestionHandler {
             return ServerResponse.ok().build();
         }
         String input = optionalInput.get();
-        List<Pair> result = autocompletionService.autocomplete(input);
+        List<String> result = suggestionService.suggestions(input);
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromObject(result));

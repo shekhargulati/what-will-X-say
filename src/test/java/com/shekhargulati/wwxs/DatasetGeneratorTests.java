@@ -18,7 +18,7 @@ public class DatasetGeneratorTests {
     @Test
     public void should_download_content_from_file() throws Exception {
         Path outputDir = folder.getRoot().toPath();
-        DatasetGenerator.donwloadUrls(
+        DatasetGenerator.writeTextToOutputDir(
                 Paths.get("src", "test", "resources", "urls.txt"),
                 outputDir
         );

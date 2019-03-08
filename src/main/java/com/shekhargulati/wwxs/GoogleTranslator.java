@@ -9,14 +9,14 @@ import javax.script.ScriptException;
 import java.io.IOException;
 import java.net.URLEncoder;
 
-public class Translator {
+public class GoogleTranslator {
 
     private ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
     private Invocable invocable;
     private String url;
     private OkHttpClient client = new OkHttpClient();
 
-    public Translator() {
+    public GoogleTranslator() {
         this.url = "http://translate.google.com/translate_a/t?client=webapp&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&dt=at&ie=UTF-8&oe=UTF-8&otf=2&ssel=0&tsel=0&kc=1";
         evaluateScript();
     }
@@ -45,7 +45,7 @@ public class Translator {
         invocable = (Invocable) engine;
     }
 
-    public String translate(String source, String fromLang, String toLang)  {
+    public String translate(String source, String fromLang, String toLang) {
         try {
             String updatedUrl = String.format(
                     "%s&sl=%s&tl=%s&hl=%s&tk=%s",
@@ -81,6 +81,15 @@ public class Translator {
         } catch (ScriptException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void main(String[] args) {
+        GoogleTranslator translator = new GoogleTranslator();
+        System.out.println(translator.translate(
+                "hello",
+                "en",
+                "es"
+        ));
     }
 
 }
